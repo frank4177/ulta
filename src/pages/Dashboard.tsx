@@ -3,16 +3,18 @@ import TwitterLogin from 'react-twitter-auth/lib/react-twitter-auth-component.js
 
 
 const Dashboard = () => {
-  const [ setOnFail] = useState<any>()
-  const [ setIsSuccess] = useState<any>()
+  const [fail, setOnFail] = useState<any>()
+  const [success, setIsSuccess] = useState<any>()
+
+  console.log(success, fail)
   return (
     <>
       <div className="dashboard">
         <TwitterLogin
           loginUrl="https://ulta-nine.vercel.app/"
-          onFailure={setIsSuccess}
-          onSuccess={setOnFail}
-          requestTokenUrl="https://ulta-nine.vercel.app/auth/twitter/redirect"
+          onFailure={()=> setIsSuccess("")}
+          onSuccess={()=>setOnFail("")}
+          requestTokenUrl="https://api.twitter.com/oauth/request_token"
         />
       </div>
     </>
