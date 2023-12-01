@@ -9,10 +9,10 @@ const Dashboard = () => {
     <>
       <div className="dashboard">
         <TwitterLogin
-          loginUrl="http://localhost:4000//api/v1.1/auth/twitter"
+          loginUrl="https://ulta-nine.vercel.app/"
           onFailure={setIsSuccess}
           onSuccess={setOnFail}
-          requestTokenUrl="http://localhost:4000/auth/twitter/uta"
+          requestTokenUrl="https://ulta-nine.vercel.app/auth/twitter/redirect"
         />
       </div>
     </>
