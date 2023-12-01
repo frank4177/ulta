@@ -1,0 +1,13 @@
+@import "../abstracts/mixins";
+
+.home{
+    @include flex-center;
+    padding: 10px;
+
+    &__box{
+        width: 300px;
+        max-height: 300px;
+        box-shadow: 2px 2px 1px 3px;
+        background-color: red;
+    }
+}
