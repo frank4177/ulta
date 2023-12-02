@@ -6,15 +6,20 @@ import axios from "axios";
 // import otpGenerator from "otp-generator";
 import oauthSignature from "oauth-signature";
 
+const apiKey = import.meta.env.VITE_TWITTER_KEY 
+const secretKey = import.meta.env.VITE_SECRETE_KEY 
+
 const Home = () => {
   // const navigate = useNavigate();
   const [userData, setUserData] = useState<any>();
   const [tokenresp, setTokenResp] = useState<any>();
   const [ress, setRes] = useState<any>();
+  const [recipientID, setRecipientId] = useState<any>();
 
   console.log(ress);
+  console.log(userData);
 
-  console.log(tokenresp?.oauthAccessToken);
+  console.log(recipientID);
 
   const generateOAuthNonce = () => {
     // Generate a random nonce
@@ -40,7 +45,7 @@ const Home = () => {
   ) => {
     // Implement your logic for generating the signature
     // This example uses the oauth-signature library
-    const consumerSecret = "FJ2TL7JF8LLqxXa0e9fJJ7LbIxYU6MQJRlOx9eYF508rU5SUY9"; // Replace with your Twitter app's consumer secret
+    const consumerSecret = secretKey; // Replace with your Twitter app's consumer secret
     const tokenSecret = tokenresp?.oauthTokenSecret; // Make sure to have the user's access token secret
 
     const signature = oauthSignature.generate(
@@ -65,15 +70,14 @@ const Home = () => {
       .then((res: any) => {
         // console.log(res);
 
-  
         // Generate OTP
         //  const otp = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false, digits: true });
-        
 
         if (res?.user?.displayName) {
           // navigate("/dashboard");
-          setUserData(res.user);
+          setUserData(res);
           setTokenResp(res?._tokenResponse);
+          setRecipientId(res?.user?.providerData[0]?.uid);
         }
       })
       .catch((err) => {
@@ -87,7 +91,7 @@ const Home = () => {
       const oauthNonce = generateOAuthNonce();
       const oauthTimestamp = generateOAuthTimestamp();
       const oauthSignature = generateOAuthSignature("POST", url, {
-        oauth_consumer_key: "qxnVuFvrwvZPly6DWWGNRRZTp", // Replace with your Twitter app's consumer key
+        oauth_consumer_key: apiKey, // Replace with your Twitter app's consumer key
         oauth_nonce: oauthNonce,
         oauth_signature_method: "HMAC-SHA1",
         oauth_timestamp: oauthTimestamp,
@@ -97,7 +101,7 @@ const Home = () => {
 
       const headers = {
         "Content-Type": "application/json",
-        Authorization: `OAuth oauth_consumer_key="qxnVuFvrwvZPly6DWWGNRRZTp", oauth_nonce="${oauthNonce}", oauth_signature="${oauthSignature}", oauth_signature_method="HMAC-SHA1", oauth_timestamp="${oauthTimestamp}", oauth_token="${tokenresp?.oauthAccessToken}", oauth_version="1.0"`,
+        Authorization: `OAuth oauth_consumer_key=${apiKey}, oauth_nonce="${oauthNonce}", oauth_signature="${oauthSignature}", oauth_signature_method="HMAC-SHA1", oauth_timestamp="${oauthTimestamp}", oauth_token="${tokenresp?.oauthAccessToken}", oauth_version="1.0"`,
       };
 
       const data = {
@@ -105,7 +109,7 @@ const Home = () => {
           type: "message_create",
           message_create: {
             target: {
-              recipient_id: "RECIPIENT_USER_ID",
+              recipient_id: recipientID,
             },
             message_data: {
               text: "Hello World!",
