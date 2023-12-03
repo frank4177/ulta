@@ -6,6 +6,19 @@ authentication with Twitter, sending a one-time password (OTP) to the user's Twi
 account, and granting access to the application's dashboard upon successful OTP 
 verification.
 
+
+## Folder struture/organization
+- src/assets: contains all images used in the application.
+- src/components: contains all components sorted/grouped by functionality.
+- src/pages contain all displayed pages in the application.
+- src/services: contains API calls and redux methodologies.
+- src/cofig: contains axios configuration(used in implementing global base url) and firebase configuration.
+- src/styles: contains scss styles grouped into main, components, pages and abstracts(this contains mixins and variables).
+- src/protected routes: contains implementation to protect routes and private pages.
+- src/types: contains Typescript type declacrations.
+- src/__tests__: contains all tests for components and pages.
+
+
 ## How to install
 - run `git clone <insertThisRepoURL>` in your target directory from your command line
 - run `npm install --legacy-peer-deps` to install all necessary dependencies
@@ -22,8 +35,10 @@ verification.
 - then Use 9ijakids deployment tool to deploy the "build" file to server.
 
 
+
 ### Tools and libraries
 Please see the package.json file for indept details of all tools and libraries.
+- SASS
 - Axios
 - Redux
 - Firebase
