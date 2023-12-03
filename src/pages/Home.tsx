@@ -8,6 +8,7 @@ import Spinners from "../component/Spinners";
 import ResponseMessage from "../component/ResponseMessage";
 import AuthForm from "../component/AuthForm";
 import { TokenReponse } from "../types";
+import cryptoRandomString from "crypto-random-string";
 
 const apiKey = import.meta.env.VITE_TWITTER_KEY;
 const secretKey = import.meta.env.VITE_SECRETE_KEY;
@@ -26,6 +27,8 @@ const Home = () => {
   } = useSendDirectMessage(secretKey, tokenresp, apiKey, isOTP);
   const {} = useGetCredentials(userData);
 
+
+
   // FUNCTION TO INITIATE TWITTER AUTHENTICATION
   const signTwitter = () => {
     setAuthLoad(true);
@@ -35,8 +38,10 @@ const Home = () => {
       .then((res: any) => {
         setAuthLoad(false);
 
-        // Generate a random number between min and max as OTP
-        const otp = Math.floor(Math.random() * (99999 - 10000 + 1)) + 10000;
+        // Generate a secure otp
+        const otp = parseInt(
+          cryptoRandomString({ length: 5, type: "numeric" })
+        );
 
         // If user data and access token are available, set state and send direct message.
         if (res?.user?.accessToken) {
@@ -66,7 +71,7 @@ const Home = () => {
               {isAuthLoad ? (
                 <Spinners />
               ) : (
-                <Button handleClick={signTwitter} title="Login with twitter"/>
+                <Button handleClick={signTwitter} title="Login with twitter" />
               )}
               {isMutating ? <p>Sending direct message...</p> : null}
 
