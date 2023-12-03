@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Button from "./Button/Button";
+import Button from "./Button";
 import { useGetCredentials } from "../services/APIs/getCredentials";
 import ResponseMessage from "./ResponseMessage";
 
@@ -38,7 +38,6 @@ const Form = ({ type, maxlength }: IFormProp) => {
       getCredentials(otpConfirmationCode);
     }
   };
-
 
   return (
     <>

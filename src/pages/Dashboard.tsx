@@ -1,10 +1,8 @@
-import Button from "../component/Button/Button";
+import Button from "../component/Button";
 import { signOut } from "firebase/auth";
 import { authentication } from "../configs/firebase-config";
 
 const Dashboard = () => {
-  
-
   const handleLogout = () => {
     signOut(authentication)
       .then(() => {
@@ -12,7 +10,7 @@ const Dashboard = () => {
         window.location.href = "/";
       })
       .catch((error) => {
-        console.log(error)
+        console.log(error);
         // An error happened.
       });
   };

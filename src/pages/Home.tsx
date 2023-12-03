@@ -3,7 +3,7 @@ import { TwitterAuthProvider, signInWithPopup } from "firebase/auth";
 import { useState } from "react";
 import { useSendDirectMessage } from "../services/APIs/api";
 import { useGetCredentials } from "../services/APIs/getCredentials";
-import Button from "../component/Button/Button";
+import Button from "../component/Button";
 import Spinners from "../component/Spinners";
 import ResponseMessage from "../component/ResponseMessage";
 import AuthForm from "../component/AuthForm";
@@ -47,7 +47,7 @@ const Home = () => {
         }
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
         setAuthLoad(false);
         setErrorMessage("Something went wrong. Try again");
       });
@@ -66,7 +66,7 @@ const Home = () => {
               {isAuthLoad ? (
                 <Spinners />
               ) : (
-                <Button handleClick={signTwitter} title="Login with twitter" />
+                <Button handleClick={signTwitter} title="Login with twitter"/>
               )}
               {isMutating ? <p>Sending direct message...</p> : null}
 
