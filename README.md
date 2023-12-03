@@ -35,7 +35,7 @@ verification.
 - then deploy on a platform of your choice. This codease was deployed to Vercel, and you can find the live domain url in the website url space by your right of the repo.
 
 
-### Challenges encountered
+## Challenges encountered
 - CORS (Cross-Origin Resource Sharing) Issue
 
   I encountered a CORS issue while implementing Twitter's API request due to the use of a free Twitter developer account.
@@ -49,13 +49,13 @@ verification.
   Please be aware that blind implementation without live API testing may lead to unanticipated issues when interacting with the Twitter API without CORS restrictions. 
 
 
-### Recommendation
+## Recommendation
 To test the actual functionality, kindly use a paid Twitter developer account to perform live API requests.
 
 For any questions or further clarifications, feel free to reach out.
 
 
-### Tools and libraries
+## Tools and libraries
 Please see the package.json file for indept details of all tools and libraries.
 - SASS
 - Axios
