@@ -1,13 +1,17 @@
 @import "../abstracts/mixins";
+@import "../abstracts/variables";
 
 .home{
     @include flex-center;
     padding: 10px;
+    background: $background-color;
+    min-height: 100vh;
 
-    &__box{
-        width: 300px;
-        max-height: 300px;
-        box-shadow: 2px 2px 1px 3px;
-        background-color: red;
+    &__innerContainer{
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        flex-direction: column;
+        width: 100%;
     }
 }

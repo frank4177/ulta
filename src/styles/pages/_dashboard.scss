@@ -1,0 +1,7 @@
+.dashboard{
+    @include flex-center;
+    padding: 10px;
+    background: $background-color;
+    min-height: 100vh;
+    flex-direction: column;
+}

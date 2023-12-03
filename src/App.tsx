@@ -1,7 +1,10 @@
 import "./styles/main.scss"
+import "./styles/main.scss";
 import Dashboard from "./pages/Dashboard"
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home";
+import ProtectedRoutes from "./ProtectedRoute/protectedRoutes";
+
 
 function App() {
 
@@ -20,7 +23,7 @@ function App() {
       children: [
         {
           path: "/dashboard",
-          element: <Dashboard />,
+          element: <ProtectedRoutes Component={Dashboard}/>,
         },
         {
           path: "/",
