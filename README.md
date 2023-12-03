@@ -44,7 +44,7 @@ verification.
 
   Unfortunately, I was unable to test the actual request and receive valid responses because of CORS restrictions.
 
-  Some of the API responses used in the codebase is based on the object structure provided in Twitter's documentation, assuming a successful request. 
+  Some of the implementation here relies on the object structure outlined in Twitter's documentation, presuming a successful API response.
 
   Please be aware that blind implementation without live API testing may lead to unanticipated issues when interacting with the Twitter API without CORS restrictions. 
 

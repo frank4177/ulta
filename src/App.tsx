@@ -1,5 +1,3 @@
-import "./styles/main.scss"
-import "./styles/main.scss";
 import Dashboard from "./pages/Dashboard"
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home";

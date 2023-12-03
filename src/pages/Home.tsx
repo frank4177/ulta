@@ -1,7 +1,7 @@
 import { authentication } from "../configs/firebase-config";
 import { TwitterAuthProvider, signInWithPopup } from "firebase/auth";
 import { useState } from "react";
-import { useSendDirectMessage } from "../services/APIs/api";
+import { useSendDirectMessage } from "../services/APIs/sendDirectMessage";
 import { useGetCredentials } from "../services/APIs/getCredentials";
 import Button from "../component/Button";
 import Spinners from "../component/Spinners";
@@ -71,7 +71,7 @@ const Home = () => {
               {isMutating ? <p>Sending direct message...</p> : null}
 
               {isError && !isAuthLoad ? (
-                <ResponseMessage message="Sending OTP failed. :(" />
+                <ResponseMessage message="Sending OTP failed. Please try paid developer account :(" />
               ) : null}
             </>
           )}

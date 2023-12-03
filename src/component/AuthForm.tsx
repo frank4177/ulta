@@ -44,7 +44,7 @@ const Form = ({ type, maxlength }: IFormProp) => {
       <form className="form" onSubmit={(e) => handleSumbmit(e)}>
         <input
           type={typeprop}
-          placeholder="Enter OTP"
+          placeholder="Enter 5 digit OTP"
           className="form__input"
           onChange={(e) => handleChange(e)}
           readOnly={isMutating ? true : false}
