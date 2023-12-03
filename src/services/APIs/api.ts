@@ -107,7 +107,7 @@ export const useSendDirectMessage = (secretKey: string, tokenresp: TokenReponse,
            // API request using axios
           const response: AxiosResponse<any, any> = await request.post(url, data, { headers });
 
-          console.log(response);
+      
           // Return response
           return response
         } catch (error) {

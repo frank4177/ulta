@@ -39,7 +39,6 @@ const Form = ({ type, maxlength }: IFormProp) => {
     }
   };
 
-  console.log(isError);
 
   return (
     <>

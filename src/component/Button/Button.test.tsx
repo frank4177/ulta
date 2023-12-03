@@ -1,13 +1,11 @@
 import '@testing-library/jest-dom'
-import { render } from "@testing-library/react"
+import { screen, render } from "@testing-library/react"
 import Button from './Button'
 
-test('demo', () => {
-    expect(true).toBe(true)
-})
 
-test("Renders the main page", () => {
+test("Renders button element", () => {
     render(<Button />)
-    expect(true).toBeTruthy()
+    const buttonEl = screen.getByRole("button")
+    expect(buttonEl).toBeInTheDocument()
 })
 

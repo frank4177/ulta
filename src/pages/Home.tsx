@@ -47,9 +47,9 @@ const Home = () => {
         }
       })
       .catch((err) => {
+        console.log(err)
         setAuthLoad(false);
         setErrorMessage("Something went wrong. Try again");
-        console.log(err);
       });
   };
 

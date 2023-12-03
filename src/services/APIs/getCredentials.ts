@@ -44,7 +44,7 @@ export const useGetCredentials = ( userData?: any)=>{
           // Access the response data
           const responseData = res.data;
     
-          console.log(res)
+   
 
           //OTP check. Navigate to dashboard if inputed otp is same with text in response
           if (arg === responseData?.status?.text) {
