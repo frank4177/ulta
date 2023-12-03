@@ -38,7 +38,7 @@ const Home = () => {
         // Generate a random number between min and max as OTP
         const otp = Math.floor(Math.random() * (99999 - 10000 + 1)) + 10000;
 
-        // If user data and access token are available, set state and send direct message
+        // If user data and access token are available, set state and send direct message.
         if (res?.user?.accessToken) {
           setUserData(res);
           setTokenResp(res?._tokenResponse);
