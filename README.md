@@ -49,7 +49,7 @@ verification.
   Please be aware that blind implementation without live API testing may lead to unanticipated issues when interacting with the Twitter API without CORS restrictions. 
 
 
-### Recommeddation
+### Recommendation
 To test the actual functionality, kindly use a paid Twitter developer account to perform live API requests.
 
 For any questions or further clarifications, feel free to reach out.
