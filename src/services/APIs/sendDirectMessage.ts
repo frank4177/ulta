@@ -29,7 +29,8 @@ export const useSendDirectMessage = () => {
 
     // Function to generate a random OAuth nonce
     const generateOAuthNonce = () => {
-        return Math.random();
+      const nonce = Math.random().toString(36).substring(2) + new Date().getTime().toString(36)
+        return nonce
       };
     
 
@@ -44,7 +45,7 @@ export const useSendDirectMessage = () => {
         url: string,
         parameters: {
           oauth_consumer_key?: string; 
-          oauth_nonce: number;
+          oauth_nonce: string;
           oauth_signature_method: string;
           oauth_timestamp: string;
           oauth_token?: string;
@@ -73,6 +74,7 @@ export const useSendDirectMessage = () => {
 
           // generateOAuthTimestamp function call
           const oauthTimestamp = generateOAuthTimestamp();
+          
 
           //generateOAuthSignature function call with params
           const oauthSignature = generateOAuthSignature("POST", "https://api.twitter.com/1.1/direct_messages/events/new.json", {
@@ -108,6 +110,19 @@ export const useSendDirectMessage = () => {
            // API request to send direct message using axios
           const response: AxiosResponse<any, any> = await request.post(url, data, { headers });
 
+          
+           // Check if headers are present
+          if (response.headers) {
+          // Log rate limit information from response headers
+          const rateLimitLimit = response.headers['x-rate-limit-limit'];
+          const rateLimitRemaining = response.headers['x-rate-limit-remaining'];
+          const rateLimitReset = response.headers['x-rate-limit-reset'];
+
+          console.log('Rate Limit Information:');
+          console.log('Limit:', rateLimitLimit);
+          console.log('Remaining:', rateLimitRemaining);
+          console.log('Reset Time:', new Date(parseInt(rateLimitReset) * 1000));
+        }
       
           // Return response
           return response

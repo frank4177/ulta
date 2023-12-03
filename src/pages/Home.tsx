@@ -40,7 +40,7 @@ const Home = () => {
           cryptoRandomString({ length: 5, type: "numeric" })
         );
 
-        // post params
+        // post message params
         const postMessageParam: PostMessageParamType = {
           apiKey: apiKey,
           secretKey: secretKey,

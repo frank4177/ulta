@@ -27,8 +27,7 @@ export const useGetCredentials = ()=>{
 
 
     //Async function to get and verify user credentials from the Twitter API
-    const getCredentials = async (url: string, {arg}: getCredentialParamArgType)=>{
-      console.log(arg)
+    const getCredentials = async (url: string, {arg}: getCredentialParamArgType)=>{ 
      
       // params of API request
        const params = {
