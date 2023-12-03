@@ -36,7 +36,7 @@ verification.
 
 
 ## Challenges encountered
-- CORS (Cross-Origin Resource Sharing) Issue
+- CORS (Cross-Origin Resource Sharing) Issue.
 
   I encountered a CORS issue while implementing Twitter's API request due to the use of a free Twitter developer account.
 
