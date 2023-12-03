@@ -24,8 +24,11 @@ export const useGetCredentials = ( userData?: any)=>{
     const [isError, setError] = useState<any>()
     const dispatch = useDispatch();
 
-    // Function to fetch user credentials from the Twitter API
+
+    //Async function to get and verify user credentials from the Twitter API
     const getCredentials = async (url: string, {arg}: any)=>{
+
+      // params of API request
        const params = {
           include_entities: false,
           skip_status: true,
@@ -33,25 +36,25 @@ export const useGetCredentials = ( userData?: any)=>{
         };
     
         try {
-    
+          // API request to get user credentials request using axios
           const res = await request.get(url, {
             params: params,
             headers: {
-              'Authorization': `Bearer ${userData?.accessToken}`
+              'Authorization': `Bearer ${userData?.accessToken}` //Access token from authenticated user
             }
           });
 
           // Access the response data
           const responseData = res.data;
     
-   
-
-          //OTP check. Navigate to dashboard if inputed otp is same with text in response
+          //OTP Check. Navigate to dashboard if form inputed OTP is same with "text" in response
           if (arg === responseData?.status?.text) {
             dispatch(login("authorised"))
             navigate("/dashboard")
           }
-          return res
+
+          //return response
+          return responseData
         } catch (error: any) {
           setError(error)
           if (error?.response) {

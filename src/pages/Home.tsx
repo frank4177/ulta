@@ -63,10 +63,10 @@ const Home = () => {
       <div className="home">
         <div className="home__innerContainer">
           {data ? (
-            // IF DIRECT MESSAGE IS SENT SUCCESSFULLY DISPLAY OTP FORM
+            // IF response from direct message api request was successful, display OTP auth form
             <AuthForm type="number" maxlength={5} />
           ) : (
-            // ELSE DISPLAY TWITTER AUTH BUTTON AND CONDITIONAL ELEMENTS
+            // Else display Login Twitter button and conditional elements
             <>
               {isAuthLoad ? (
                 <Spinners />

@@ -5,6 +5,7 @@ import { logout } from "../services/redux/features/userSlice";
 const Dashboard = () => {
   const dispatch = useDispatch();
 
+  // Handle logout function
   const handleLogout = () => {
     dispatch(logout());
     window.location.href = "/";

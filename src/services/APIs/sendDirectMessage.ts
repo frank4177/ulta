@@ -66,13 +66,14 @@ export const useSendDirectMessage = (secretKey: string, tokenresp: TokenReponse,
         return signature;
       };
 
-      // Function to send a direct message using Twitter API
+      //Async function to send a direct message using Twitter API
        const postMessage = async (url: string, { arg }: any) => {
         try {
-          const apiUrl = "https://api.twitter.com/1.1/direct_messages/events/new.json";
           const oauthNonce = generateOAuthNonce();
           const oauthTimestamp = generateOAuthTimestamp();
-          const oauthSignature = generateOAuthSignature("POST", apiUrl, {
+
+          // request to generate Oauth signature
+          const oauthSignature = generateOAuthSignature("POST", "https://api.twitter.com/1.1/direct_messages/events/new.json", {
             oauth_consumer_key: apiKey,
             oauth_nonce: oauthNonce,
             oauth_signature_method: "HMAC-SHA1",
@@ -81,30 +82,28 @@ export const useSendDirectMessage = (secretKey: string, tokenresp: TokenReponse,
             oauth_version: "1.0",
           });
 
-
           // Headers for the API request
           const headers = {
             "Content-Type": "application/json",
             Authorization: `OAuth oauth_consumer_key=${apiKey}, oauth_nonce="${oauthNonce}", oauth_signature="${oauthSignature}", oauth_signature_method="HMAC-SHA1", oauth_timestamp="${oauthTimestamp}", oauth_token="${arg?.accessToken}", oauth_version="1.0"`,
           };
 
-
-          // Data payload for the direct message
+          // Data payload for the direct message. Send OTP in "text" key 
           const data = {
             event: {
               type: "message_create",
               message_create: {
                 target: {
-                  recipient_id: arg?.user?.providerData[0]?.uid,
+                  recipient_id: arg?.user?.providerData[0]?.uid, //Recipient ID aka authenticated user ID
                 },
                 message_data: {
-                  text: isOTP ,
+                  text: isOTP , //OTP sent in text key
                 },
               },
             },
           };
 
-           // API request using axios
+           // API request to send direct message using axios
           const response: AxiosResponse<any, any> = await request.post(url, data, { headers });
 
       
