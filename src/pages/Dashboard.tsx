@@ -1,18 +1,13 @@
 import Button from "../component/Button";
-import { signOut } from "firebase/auth";
-import { authentication } from "../configs/firebase-config";
+import { useDispatch } from "react-redux";
+import { logout } from "../services/redux/features/userSlice";
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
+
   const handleLogout = () => {
-    signOut(authentication)
-      .then(() => {
-        // Sign-out successful.
-        window.location.href = "/";
-      })
-      .catch((error) => {
-        console.log(error);
-        // An error happened.
-      });
+    dispatch(logout());
+    window.location.href = "/";
   };
   return (
     <>

@@ -9,15 +9,19 @@ const initialState: isSending = {
 }
 
 const userSlice = createSlice({
-  name: 'u',
+  name: 'user',
   initialState,
   reducers: {
     login: (state, action: PayloadAction<string>) => {
       state.value = action.payload
     },
+    logout: (state) => {
+      state.value = ""
+    },
+  
   
   },
 });
 
-export const {login} = userSlice.actions;
+export const {login, logout} = userSlice.actions;
 export default userSlice.reducer;
