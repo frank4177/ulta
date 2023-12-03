@@ -32,8 +32,27 @@ verification.
 
 ## How to deploy
 - first run `npm run build` to make code production ready
-- then Use 9ijakids deployment tool to deploy the "build" file to server.
+- then deploy on a platform of your choice. This codease was deployed to Vercel, and you can find the live domain url in the website url space by your right of the repo.
 
+
+### Challenges encountered
+- CORS (Cross-Origin Resource Sharing) Issue
+
+  I encountered a CORS issue while implementing Twitter's API request due to the use of a free Twitter developer account.
+
+  Twitter API server deliberately does not include the necessary 'Access-Control-Allow-Origin' in its headers in responses. To permit requests from my domain, the server needs to include this header.
+
+  Unfortunately, I was unable to test the actual request and receive valid responses because of CORS restrictions.
+
+  Some of the API responses used in the codebase is based on the object structure provided in Twitter's documentation, assuming a successful request. 
+
+  Please be aware that blind implementation without live API testing may lead to unanticipated issues when interacting with the Twitter API without CORS restrictions. 
+
+
+### Recommeddation
+To test the actual functionality, kindly use a paid Twitter developer account to perform live API requests.
+
+For any questions or further clarifications, feel free to reach out.
 
 
 ### Tools and libraries
@@ -44,3 +63,5 @@ Please see the package.json file for indept details of all tools and libraries.
 - Firebase
 - oauth-signature
 - React-icons
+
+
