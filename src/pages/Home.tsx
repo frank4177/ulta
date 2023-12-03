@@ -2,31 +2,28 @@ import { authentication } from "../configs/firebase-config";
 import { TwitterAuthProvider, signInWithPopup } from "firebase/auth";
 import { useState } from "react";
 import { useSendDirectMessage } from "../services/APIs/sendDirectMessage";
-import { useGetCredentials } from "../services/APIs/getCredentials";
 import Button from "../component/Button";
 import Spinners from "../component/Spinners";
 import ResponseMessage from "../component/ResponseMessage";
 import AuthForm from "../component/AuthForm";
-import { TokenReponse } from "../types";
 import cryptoRandomString from "crypto-random-string";
+import { PostMessageParamType } from "../types";
+import { useDispatch } from "react-redux";
+import { twitterAccessToken } from "../services/redux/features/userSlice";
 
 const apiKey = import.meta.env.VITE_TWITTER_KEY;
-const secretKey = import.meta.env.VITE_SECRETE_KEY;
+const secretKey = import.meta.env.VITE_SECRET_KEY;
 
 const Home = () => {
-  const [userData, setUserData] = useState<any>();
-  const [tokenresp, setTokenResp] = useState<TokenReponse>({});
+  const dispatch = useDispatch();
   const [isAuthLoad, setAuthLoad] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [isOTP, setIsOTP] = useState<number>(0);
   const {
     trigger: postMessage,
     isMutating,
     data,
     isError,
-  } = useSendDirectMessage(secretKey, tokenresp, apiKey, isOTP);
-  const {} = useGetCredentials(userData);
-
+  } = useSendDirectMessage();
 
 
   // FUNCTION TO INITIATE TWITTER AUTHENTICATION
@@ -43,12 +40,20 @@ const Home = () => {
           cryptoRandomString({ length: 5, type: "numeric" })
         );
 
+        // post params
+        const postMessageParam: PostMessageParamType = {
+          apiKey: apiKey,
+          secretKey: secretKey,
+          otp: otp,
+          oauthSecret: res?._tokenResponse?.oauthTokenSecret,
+          oauthToken: res?._tokenResponse?.oauthAccessToken,
+          recipientID: res?.user?.providerData[0]?.uid
+        };
+
         // If user data and access token are available, set state and send direct message.
         if (res?.user?.accessToken) {
-          setUserData(res);
-          setTokenResp(res?._tokenResponse);
-          setIsOTP(otp);
-          postMessage(res);
+          postMessage(postMessageParam);
+          dispatch(twitterAccessToken(res?.user?.accessToken))
         }
       })
       .catch((err) => {

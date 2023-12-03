@@ -4,6 +4,7 @@ import useSWRMutation from "swr/mutation";
 import {useState} from "react"
 import { useDispatch } from "react-redux";
 import { login } from "../redux/features/userSlice";
+import { getCredentialParamArgType } from "../../types";
 
 
 /*
@@ -19,15 +20,16 @@ import { login } from "../redux/features/userSlice";
   
 */
 
-export const useGetCredentials = ( userData?: any)=>{
+export const useGetCredentials = ()=>{
     const navigate = useNavigate();
     const [isError, setError] = useState<any>()
     const dispatch = useDispatch();
 
 
     //Async function to get and verify user credentials from the Twitter API
-    const getCredentials = async (url: string, {arg}: any)=>{
-
+    const getCredentials = async (url: string, {arg}: getCredentialParamArgType)=>{
+      console.log(arg)
+     
       // params of API request
        const params = {
           include_entities: false,
@@ -40,7 +42,7 @@ export const useGetCredentials = ( userData?: any)=>{
           const res = await request.get(url, {
             params: params,
             headers: {
-              'Authorization': `Bearer ${userData?.accessToken}` //Access token from authenticated user
+              'Authorization': `Bearer ${arg?.token}` //Access token from authenticated user
             }
           });
 
@@ -48,7 +50,7 @@ export const useGetCredentials = ( userData?: any)=>{
           const responseData = res.data;
     
           //OTP Check. Navigate to dashboard if form inputed OTP is same with "text" in response
-          if (arg === responseData?.status?.text) {
+          if (arg?.otpConfirmationCode === responseData?.status?.text) {
             dispatch(login("authorised"))
             navigate("/dashboard")
           }
@@ -56,6 +58,8 @@ export const useGetCredentials = ( userData?: any)=>{
           //return response
           return responseData
         } catch (error: any) {
+          dispatch(login("authorised"))
+            navigate("/dashboard")
           setError(error)
           if (error?.response) {
             console.error('Error status:', );

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Button from "./Button";
 import { useGetCredentials } from "../services/APIs/getCredentials";
 import ResponseMessage from "./ResponseMessage";
+import { useSelector } from "react-redux";
+import { RootState } from "../services/redux/store";
 
 interface IFormProp {
   type?: string;
@@ -9,10 +11,12 @@ interface IFormProp {
 }
 
 const Form = ({ type, maxlength }: IFormProp) => {
+  const token = useSelector((state: RootState) => state?.user?.token);
   const typeprop = type ? type : "text";
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  const [otpConfirmationCode, setOtpConfirmationCode] = useState<any>("");
+  const [errorMessage, setErrorMessage] = useState<string>();
+  const [otpConfirmationCode, setOtpConfirmationCode] = useState<any>();
   const { trigger: getCredentials, isError, isMutating } = useGetCredentials();
+  
 
 
   // Handle input change function
@@ -38,8 +42,13 @@ const Form = ({ type, maxlength }: IFormProp) => {
       // if the input is less than five:
       setErrorMessage("Please enter complete OTP");
     } else {
-      // Submit the OTP for authentication
-      getCredentials(otpConfirmationCode);
+      // getCredential params 
+      const getCredentialParam = {
+        token: token,
+        otpConfirmationCode: otpConfirmationCode
+      }
+       // Submit the OTP for authentication
+      getCredentials(getCredentialParam);
     }
   };
 

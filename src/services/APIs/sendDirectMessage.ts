@@ -3,7 +3,7 @@ import { request } from "../../configs/axios";
 import { AxiosResponse } from "axios";
 import useSWRMutation from "swr/mutation";
 import { useState } from "react";
-import { TokenReponse } from "../../types";
+import { PostMessageParamArgType} from "../../types";
 
 
 /*
@@ -21,8 +21,11 @@ import { TokenReponse } from "../../types";
 
 
 
-export const useSendDirectMessage = (secretKey: string, tokenresp: TokenReponse, apiKey: string, isOTP: number) => {
+export const useSendDirectMessage = () => {
     const [isError, setError] = useState<any>()  
+
+  //Async function to send a direct message using Twitter API
+   const postMessage = async (url: string, { arg }: PostMessageParamArgType) => {
 
     // Function to generate a random OAuth nonce
     const generateOAuthNonce = () => {
@@ -35,21 +38,21 @@ export const useSendDirectMessage = (secretKey: string, tokenresp: TokenReponse,
         return Math.floor(Date.now() / 1000).toString();
       };
     
-      // Function to generate OAuth signature for the API request
+      // Function to generate OAuth signature with oauthSignature npm package 
       const generateOAuthSignature = (
         method: string,
         url: string,
         parameters: {
-          oauth_consumer_key: string; 
+          oauth_consumer_key?: string; 
           oauth_nonce: number;
           oauth_signature_method: string;
           oauth_timestamp: string;
-          oauth_token: string;
-          oauth_version: string;
+          oauth_token?: string;
+          oauth_version?: string;
         }
       ) => {
-        const consumerSecret = secretKey; 
-        const tokenSecret = tokenresp?.oauthTokenSecret; 
+        const consumerSecret = arg?.secretKey; 
+        const tokenSecret = arg?.oauthSecret; 
     
         const signature = oauthSignature.generate(
           method,
@@ -61,31 +64,30 @@ export const useSendDirectMessage = (secretKey: string, tokenresp: TokenReponse,
             encodeSignature: false,
           }
         );
-    
-    
         return signature;
       };
 
-      //Async function to send a direct message using Twitter API
-       const postMessage = async (url: string, { arg }: any) => {
         try {
+          // generateOAuthNonce funtion call
           const oauthNonce = generateOAuthNonce();
+
+          // generateOAuthTimestamp function call
           const oauthTimestamp = generateOAuthTimestamp();
 
-          // request to generate Oauth signature
+          //generateOAuthSignature function call with params
           const oauthSignature = generateOAuthSignature("POST", "https://api.twitter.com/1.1/direct_messages/events/new.json", {
-            oauth_consumer_key: apiKey,
+            oauth_consumer_key: arg?.apiKey,
             oauth_nonce: oauthNonce,
             oauth_signature_method: "HMAC-SHA1",
             oauth_timestamp: oauthTimestamp,
-            oauth_token: arg?.accessToken,
+            oauth_token: arg?.oauthToken,
             oauth_version: "1.0",
           });
 
           // Headers for the API request
           const headers = {
             "Content-Type": "application/json",
-            Authorization: `OAuth oauth_consumer_key=${apiKey}, oauth_nonce="${oauthNonce}", oauth_signature="${oauthSignature}", oauth_signature_method="HMAC-SHA1", oauth_timestamp="${oauthTimestamp}", oauth_token="${arg?.accessToken}", oauth_version="1.0"`,
+            Authorization: `OAuth oauth_consumer_key=${arg?.apiKey}, oauth_nonce="${oauthNonce}", oauth_signature="${oauthSignature}", oauth_signature_method="HMAC-SHA1", oauth_timestamp="${oauthTimestamp}", oauth_token="${arg?.oauthToken}", oauth_version="1.0"`,
           };
 
           // Data payload for the direct message. Send OTP in "text" key 
@@ -94,10 +96,10 @@ export const useSendDirectMessage = (secretKey: string, tokenresp: TokenReponse,
               type: "message_create",
               message_create: {
                 target: {
-                  recipient_id: arg?.user?.providerData[0]?.uid, //Recipient ID aka authenticated user ID
+                  recipient_id: arg?.recipientID, //Recipient ID aka authenticated user ID
                 },
                 message_data: {
-                  text: isOTP , //OTP sent in text key
+                  text: arg?.otp , //OTP sent in text key
                 },
               },
             },

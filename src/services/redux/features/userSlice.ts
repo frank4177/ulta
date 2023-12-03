@@ -2,10 +2,12 @@ import {createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface  isSending{
   value:string
+  token: string
 }
 
 const initialState: isSending = {
-  value: ""
+  value: "",
+  token:""
 }
 
 const userSlice = createSlice({
@@ -18,10 +20,11 @@ const userSlice = createSlice({
     logout: (state) => {
       state.value = ""
     },
-  
-  
+    twitterAccessToken: (state, action: PayloadAction<string>) => {
+      state.token = action.payload
+    },
   },
 });
 
-export const {login, logout} = userSlice.actions;
+export const {login, logout, twitterAccessToken} = userSlice.actions;
 export default userSlice.reducer;
