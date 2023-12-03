@@ -1,12 +1,9 @@
 import { initializeApp } from 'firebase/app';
 import {getAuth} from "firebase/auth"
 
-const API_KEY = import.meta.env.VITE_FIREBASE_KEY
-
-
 const firebaseConfig = {
     //...
-    apiKey: API_KEY,
+    apiKey: "AIzaSyD6G8CVHeuw601Zp3MgbuBBUFRf8RC_Q-Q",
     authDomain: "twitter-auth-b7daf.firebaseapp.com",
     projectId: "twitter-auth-b7daf",
     storageBucket: "twitter-auth-b7daf.appspot.com",
