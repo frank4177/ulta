@@ -9,7 +9,7 @@ import AuthForm from "../component/AuthForm";
 import cryptoRandomString from "crypto-random-string";
 import { PostMessageParamType } from "../types";
 import { useDispatch } from "react-redux";
-import { twitterAccessToken } from "../services/redux/features/userSlice";
+import { twitterData } from "../services/redux/features/userSlice";
 
 const apiKey = import.meta.env.VITE_TWITTER_KEY;
 const secretKey = import.meta.env.VITE_SECRET_KEY;
@@ -47,13 +47,14 @@ const Home = () => {
           otp: otp,
           oauthSecret: res?._tokenResponse?.oauthTokenSecret,
           oauthToken: res?._tokenResponse?.oauthAccessToken,
-          recipientID: res?.user?.providerData[0]?.uid
+          recipientID: res?.user?.providerData[0]?.uid,
+          accessToken: res?.user?.accessToken
         };
 
         // If user data and access token are available, set state and send direct message.
         if (res?.user?.accessToken) {
           postMessage(postMessageParam);
-          dispatch(twitterAccessToken(res?.user?.accessToken))
+          dispatch(twitterData(postMessageParam))
         }
       })
       .catch((err) => {

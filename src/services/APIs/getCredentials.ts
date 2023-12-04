@@ -5,6 +5,7 @@ import {useState} from "react"
 import { useDispatch } from "react-redux";
 import { login } from "../redux/features/userSlice";
 import { getCredentialParamArgType } from "../../types";
+import oauthSignature from "oauth-signature";
 
 
 /*
@@ -28,6 +29,47 @@ export const useGetCredentials = ()=>{
 
     //Async function to get and verify user credentials from the Twitter API
     const getCredentials = async (url: string, {arg}: getCredentialParamArgType)=>{ 
+
+        // Function to generate a random OAuth nonce
+    const generateOAuthNonce = () => {
+      const nonce = Math.random().toString(36).substring(2) + new Date().getTime().toString(36)
+        return nonce
+      };
+    
+
+      // Function to generate a timestamp for OAuth
+      const generateOAuthTimestamp = () => {
+        return Math.floor(Date.now() / 1000).toString();
+      };
+    
+      // Function to generate OAuth signature with oauthSignature npm package 
+      const generateOAuthSignature = (
+        method: string,
+        url: string,
+        parameters: {
+          oauth_consumer_key?: string; 
+          oauth_nonce: string;
+          oauth_signature_method: string;
+          oauth_timestamp: string;
+          oauth_token?: string;
+          oauth_version?: string;
+        }
+      ) => {
+        const consumerSecret = arg?.twitterData?.secretKey; 
+        const tokenSecret = arg?.twitterData?.oauthSecret; 
+    
+        const signature = oauthSignature.generate(
+          method,
+          url,
+          parameters,
+          consumerSecret,
+          tokenSecret,
+          {
+            encodeSignature: false,
+          }
+        );
+        return signature;
+      };
      
       // params of API request
        const params = {
@@ -37,11 +79,28 @@ export const useGetCredentials = ()=>{
         };
     
         try {
+           // generateOAuthNonce funtion call
+           const oauthNonce = generateOAuthNonce();
+
+           // generateOAuthTimestamp function call
+           const oauthTimestamp = generateOAuthTimestamp();
+           
+           //generateOAuthSignature function call with params
+           const oauthSignature = generateOAuthSignature("POST", "https://api.twitter.com/1.1/account/verify_credentials.json", {
+             oauth_consumer_key: arg?.twitterData?.apiKey,
+             oauth_nonce: oauthNonce,
+             oauth_signature_method: "HMAC-SHA1",
+             oauth_timestamp: oauthTimestamp,
+             oauth_token: arg?.twitterData?.oauthToken,
+             oauth_version: "1.0",
+           });
+
           // API request to get user credentials request using axios
           const res = await request.get(url, {
             params: params,
             headers: {
-              'Authorization': `Bearer ${arg?.token}` //Access token from authenticated user
+              Authorization: `OAuth oauth_consumer_key=${arg?.twitterData?.apiKey}, oauth_nonce="${oauthNonce}", oauth_signature="${oauthSignature}", oauth_signature_method="HMAC-SHA1", oauth_timestamp="${oauthTimestamp}", oauth_token="${arg?.twitterData?.oauthToken}", oauth_version="1.0"`,
+
             }
           });
 
@@ -57,8 +116,6 @@ export const useGetCredentials = ()=>{
           //return response
           return responseData
         } catch (error: any) {
-          dispatch(login("authorised"))
-            navigate("/dashboard")
           setError(error)
           if (error?.response) {
             console.error('Error status:', );

@@ -7,6 +7,7 @@ export type PostMessageParamType = {
     oauthSecret?: string
     oauthToken?: string 
     recipientID?: string
+    accessToken?: string
   }
 
   export type PostMessageParamArgType = {
@@ -14,7 +15,7 @@ export type PostMessageParamType = {
   }
 
   export type getCredentialParamType = {
-    token: string,
+    twitterData: PostMessageParamType,
     otpConfirmationCode: string
   }
 

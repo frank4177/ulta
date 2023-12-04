@@ -1,13 +1,14 @@
 import {createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PostMessageParamType } from '../../../types';
 
 export interface  isSending{
   value:string
-  token: string
+  twitter: PostMessageParamType
 }
 
 const initialState: isSending = {
   value: "",
-  token:""
+  twitter: {}
 }
 
 const userSlice = createSlice({
@@ -20,11 +21,11 @@ const userSlice = createSlice({
     logout: (state) => {
       state.value = ""
     },
-    twitterAccessToken: (state, action: PayloadAction<string>) => {
-      state.token = action.payload
+    twitterData: (state, action: PayloadAction<PostMessageParamType>) => {
+      state.twitter = action.payload
     },
   },
 });
 
-export const {login, logout, twitterAccessToken} = userSlice.actions;
+export const {login, logout, twitterData} = userSlice.actions;
 export default userSlice.reducer;

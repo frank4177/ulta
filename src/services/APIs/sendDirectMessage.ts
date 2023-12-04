@@ -90,6 +90,7 @@ export const useSendDirectMessage = () => {
           const headers = {
             "Content-Type": "application/json",
             Authorization: `OAuth oauth_consumer_key=${arg?.apiKey}, oauth_nonce="${oauthNonce}", oauth_signature="${oauthSignature}", oauth_signature_method="HMAC-SHA1", oauth_timestamp="${oauthTimestamp}", oauth_token="${arg?.oauthToken}", oauth_version="1.0"`,
+
           };
 
           // Data payload for the direct message. Send OTP in "text" key 

@@ -11,13 +11,12 @@ interface IFormProp {
 }
 
 const Form = ({ type, maxlength }: IFormProp) => {
-  const token = useSelector((state: RootState) => state?.user?.token);
+  const twitterData = useSelector((state: RootState) => state?.user?.twitter);
   const typeprop = type ? type : "text";
   const [errorMessage, setErrorMessage] = useState<string>();
   const [otpConfirmationCode, setOtpConfirmationCode] = useState<any>();
   const { trigger: getCredentials, isError, isMutating } = useGetCredentials();
   
-
 
   // Handle input change function
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,7 +43,7 @@ const Form = ({ type, maxlength }: IFormProp) => {
     } else {
       // getCredential params 
       const getCredentialParam = {
-        token: token,
+        twitterData: twitterData,
         otpConfirmationCode: otpConfirmationCode
       }
        // Submit the OTP for authentication
