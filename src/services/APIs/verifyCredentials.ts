@@ -15,7 +15,7 @@ import CryptoJS from "crypto-js";
 
   I encountered a CORS issue while implementing this API request due to the use of a free Twitter developer account. 
 
-  Unfortunately, I was unable to test the actual request and receive valid responses because of CORS restrictions.
+  Unfortunately, I was unable to test the actual request and receive valid responses because error 413 and CORS restrictions.
 
   The implementation here is based on the object structure provided in Twitter's documentation, assuming a successful request. 
 
@@ -119,6 +119,7 @@ export const useVerifyCredentials = () => {
         console.error("Invalid or undefined OTP");
       }
 
+      // {/*NOTE: i am add this navigation here without IF condition because i do not see the response due to 403 forbidden error. i do this presuming a sucessful response}
       //Navigate to dashboard if form-inputed OTP is the same with decrypted OTP
       if (arg?.otpConfirmationCode === decryptedOTP?.toString()) {
         dispatch(login("authorised"));
@@ -127,6 +128,7 @@ export const useVerifyCredentials = () => {
 
       // Access the response data
       const responseData = res.data;
+
       //return response data
       return responseData;
     } catch (error: any) {

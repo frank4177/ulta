@@ -13,7 +13,7 @@ import CryptoJS from 'crypto-js';
 
   I encountered a CORS issue while implementing this API request due to the use of a free Twitter developer account. 
 
-  Unfortunately, I was unable to test the actual request and receive valid responses because of CORS restrictions.
+  Unfortunately, I was unable to test the actual request and receive valid responses because error 413 and CORS restrictions.
 
   The implementation here is based on the object structure provided in Twitter's documentation, assuming a successful request. 
 
@@ -118,17 +118,13 @@ export const useSendDirectMessage = () => {
       // Encrypt geneated OTP
        const encryptedOTP = CryptoJS.AES.encrypt(arg?.otp, '001').toString();
 
+       // {/*NOTE: i am add this store here without IF condition because i do not see the response due to 403 forbidden error. i do this presuming a sucessful response}
       // Store encrypted otp in redux store if direct message is successful
       dispatch(setOTP(encryptedOTP))
 
       // Return response
       return response;
     } catch (error) {
-      // Encrypt OTP
-      const encryptedOTP = CryptoJS.AES.encrypt(arg?.otp, '001').toString();
-
-      // Store otp in redux store if direct message is successful
-      dispatch(setOTP(encryptedOTP))
       console.error("Error making API request:", error);
       setError(error);
     }
