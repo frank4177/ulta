@@ -1,0 +1,10 @@
+@import "../abstracts/mixins";
+
+.navbar{
+    height: 60px;
+    @include glassStyle;
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-end;
+    padding: 5px 10px;
+}

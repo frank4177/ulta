@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Button from "./Button";
-import { useGetCredentials } from "../services/APIs/getCredentials";
+import { useVerifyCredentials } from "../services/APIs/verifyCredentials";
 import ResponseMessage from "./ResponseMessage";
 import { useSelector } from "react-redux";
 import { RootState } from "../services/redux/store";
@@ -13,17 +13,23 @@ interface IFormProp {
 const Form = ({ type, maxlength }: IFormProp) => {
   const twitterData = useSelector((state: RootState) => state?.user?.twitter);
   const typeprop = type ? type : "text";
-  const [errorMessage, setErrorMessage] = useState<string>();
-  const [otpConfirmationCode, setOtpConfirmationCode] = useState<any>();
-  const { trigger: getCredentials, isError, isMutating } = useGetCredentials();
-  
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [otpConfirmationCode, setOtpConfirmationCode] = useState<string>("");
+  const {
+    trigger: verifyCredentials,
+    isError,
+    isMutating,
+    setError
+  } = useVerifyCredentials();
+
 
   // Handle input change function
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Clear any previous error messages
     setErrorMessage("");
+    setError("")
 
-    // Limit the input based on the specified maxlength
+    // Limit the input based on the specified maxlength.
     const limit = maxlength;
     setOtpConfirmationCode(e.target.value.slice(0, limit));
   };
@@ -37,17 +43,17 @@ const Form = ({ type, maxlength }: IFormProp) => {
     if (otpConfirmationCode?.length === 0) {
       // if the input field is empty:
       setErrorMessage("Please enter OTP");
-    } else if (otpConfirmationCode.length < 5) {
+    } else if (otpConfirmationCode && otpConfirmationCode?.length < 5) {
       // if the input is less than five:
       setErrorMessage("Please enter complete OTP");
     } else {
-      // getCredential params 
-      const getCredentialParam = {
+      // verifyCredential params
+      const verifyCredentialParam = {
         twitterData: twitterData,
-        otpConfirmationCode: otpConfirmationCode
-      }
-       // Submit the OTP for authentication
-      getCredentials(getCredentialParam);
+        otpConfirmationCode: otpConfirmationCode,
+      };
+      // Verify credentials and submit inputted OTP.
+      verifyCredentials(verifyCredentialParam);
     }
   };
 
@@ -64,10 +70,10 @@ const Form = ({ type, maxlength }: IFormProp) => {
           readOnly={isMutating ? true : false}
           value={otpConfirmationCode}
         />
-  
+
         <Button title={isMutating ? "Submitting..." : "Submit"} />
 
-        {isError && !isMutating ? (
+        {isError && !errorMessage ? (
           <ResponseMessage message="Failed to authenticate OTP" />
         ) : null}
         {errorMessage ? <ResponseMessage message={errorMessage} /> : null}

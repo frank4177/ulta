@@ -17,11 +17,15 @@ verification.
 - src/protected routes: contains implementation to protect routes and private pages.
 - src/types: contains Typescript type declacrations.
 - src/__tests__: contains all tests for components and pages.
+- src/utils: this file contains all utility functions.
 
 
 ## How to install
 - run `git clone <insertThisRepoURL>` in your target directory from your command line
 - run `npm install --legacy-peer-deps` to install all necessary dependencies
+
+## Environment Setup
+ Rename ".env.example" file in the root folder to ".env" and Add corresponfing values to the keys.
 
 ## How to use
 - run `npm run dev` to start the application server.

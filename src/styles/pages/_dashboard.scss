@@ -1,7 +1,35 @@
-.dashboard{
+.dashboard {
+  background: $background-color;
+  padding: 15px;
+  min-height: 100vh;
+
+  &__container {
     @include flex-center;
-    padding: 10px;
-    background: $background-color;
-    min-height: 100vh;
     flex-direction: column;
+    padding-top: 100px;
+
+    &__profile {
+      @include glassStyle;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      max-width: 450px;
+      width: 100%;
+      padding:15px 10px;
+      gap: 10px;
+      box-sizing: border-box;
+
+      &__fields {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        margin-top: 5px;
+
+        &__label {
+          font-weight: bold;
+          margin: 0 auto;
+        }
+      }
+    }
+  }
 }

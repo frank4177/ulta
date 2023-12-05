@@ -9,13 +9,17 @@ import AuthForm from "../component/AuthForm";
 import cryptoRandomString from "crypto-random-string";
 import { PostMessageParamType } from "../types";
 import { useDispatch } from "react-redux";
-import { twitterData } from "../services/redux/features/userSlice";
+import { twitterData, userData } from "../services/redux/features/userSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "../services/redux/store";
+import Avatar from "../component/Avatar";
 
 const apiKey = import.meta.env.VITE_TWITTER_KEY;
 const secretKey = import.meta.env.VITE_SECRET_KEY;
 
 const Home = () => {
   const dispatch = useDispatch();
+  const myData = useSelector((state: RootState) => state?.user?.userData);
   const [isAuthLoad, setAuthLoad] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const {
@@ -24,7 +28,6 @@ const Home = () => {
     data,
     isError,
   } = useSendDirectMessage();
-
 
   // FUNCTION TO INITIATE TWITTER AUTHENTICATION
   const signTwitter = () => {
@@ -40,27 +43,36 @@ const Home = () => {
           cryptoRandomString({ length: 5, type: "numeric" })
         );
 
+        const user_data = {
+          screenName: res?._tokenResponse?.screenName,
+          displayName: res?._tokenResponse?.displayName,
+          photoUrl: res?._tokenResponse?.photoUrl,
+          userId: res?.user?.providerData[0]?.uid,
+          lastLogin: res?.user?.metadata?.lastSignInTime,
+        };
+
         // post message params
         const postMessageParam: PostMessageParamType = {
           apiKey: apiKey,
           secretKey: secretKey,
-          otp: otp,
+          otp: otp.toString(),
           oauthSecret: res?._tokenResponse?.oauthTokenSecret,
           oauthToken: res?._tokenResponse?.oauthAccessToken,
           recipientID: res?.user?.providerData[0]?.uid,
-          accessToken: res?.user?.accessToken
+          accessToken: res?.user?.accessToken,
         };
 
         // If user data and access token are available, set state and send direct message.
         if (res?.user?.accessToken) {
           postMessage(postMessageParam);
-          dispatch(twitterData(postMessageParam))
+          dispatch(twitterData(postMessageParam));
+          dispatch(userData(user_data));
         }
       })
       .catch((err) => {
         console.log(err);
         setAuthLoad(false);
-        setErrorMessage("Something went wrong. Try again");
+        setErrorMessage("Something went wrong. Please try again");
       });
   };
 
@@ -68,8 +80,19 @@ const Home = () => {
     <>
       <div className="home">
         <div className="home__innerContainer">
+
+          {/* If user has been authenticated, show card with minimal user data */}
+          {myData ? (
+            <div className="home__innerContainer__displayCard">
+              {/* If Photo is available, display photo */}
+              {myData?.photoUrl ? <Avatar picUrl={myData?.photoUrl} /> : null}
+              <p>{myData?.displayName}</p>
+              <span>@{`${myData?.screenName}`}</span>
+            </div>
+          ) : null}
+
+          {/*IF response from direct message api request was successful, display OTP auth form */}
           {data ? (
-            // IF response from direct message api request was successful, display OTP auth form
             <AuthForm type="number" maxlength={5} />
           ) : (
             // Else display Login Twitter button and conditional elements
@@ -82,7 +105,9 @@ const Home = () => {
               {isMutating ? <p>Sending direct message...</p> : null}
 
               {isError && !isAuthLoad ? (
-                <ResponseMessage message="Sending OTP failed. Please try paid developer account :(" />
+                <ResponseMessage
+                  message={`Hey @${myData?.screenName}! Sending OTP failed. Please try paid developer account :(`}
+                />
               ) : null}
             </>
           )}
